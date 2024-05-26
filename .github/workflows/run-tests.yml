@@ -1,0 +1,25 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  run-tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    if: |
+      !contains(github.event.pull_request.labels.*.name, 'refactor') &&
+      !contains(github.event.pull_request.labels.*.name, 'documentation') &&
+      !contains(github.event.pull_request.labels.*.name, 'test')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Tests
+        run: |
+          npm install
+          npm run coverage
