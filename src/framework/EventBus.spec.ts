@@ -17,8 +17,8 @@ describe('EventBus', () => {
 			const handler = jest.fn()
 
 			// Act
-			messageBus.registerHandler(event, handler)
-			messageBus.registerHandler(event, handler)
+			messageBus.registerHandler('EventCalled', handler)
+			messageBus.registerHandler('EventCalled', handler)
 
 			// Assert
 			expect(messageBus['handlerFor']['EventCalled'][0]).toBe(handler)
@@ -33,8 +33,8 @@ describe('EventBus', () => {
 			const event = <IEvent>{ constructor: { name: 'EventCalled' } }
 			const handler1 = jest.fn()
 			const handler2 = jest.fn()
-			messageBus.registerHandler(event, handler1)
-			messageBus.registerHandler(event, handler2)
+			messageBus.registerHandler('EventCalled', handler1)
+			messageBus.registerHandler('EventCalled', handler2)
 
 			// Act
 			messageBus.publish(event)

@@ -12,12 +12,12 @@ interface IEventBus {
 
 	/**
 	 * Registers an event handler for a specific event type.
-	 * @param event The event type to register the handler for.
+	 * @param eventName The name of the event to register the handler for.
 	 * @param handler The event handler function.
 	 */
-	registerHandler<T extends IEvent>(
-		event: T,
-		handler: (e: IMessage) => void
+	registerHandler(
+		eventName: string,
+		handler: any
 	): void
 
 	/**
@@ -37,13 +37,12 @@ export class EventBus implements IEventBus {
 	 * @private
 	 * Stores event handlers for each event type.
 	 */
-	private readonly handlerFor: { [key:string]: ((e: IMessage) => void)[] } = {}
+	private readonly handlerFor: { [key:string]: ((e: IEvent) => void)[] } = {}
 
-	public registerHandler<T extends IEvent>(
-		event: T,
-		handler: (e: IMessage) => void
+	public registerHandler(
+		eventName: string,
+		handler: any
 	): void {
-		const eventName = event.constructor.name
 		if (!this.handlerFor[eventName])
 		{
 			this.handlerFor[eventName] = []
