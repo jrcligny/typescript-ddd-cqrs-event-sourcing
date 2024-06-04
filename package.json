@@ -23,7 +23,9 @@
 	"scripts": {
 		"test": "jest",
 		"coverage": "jest --coverage",
-		"build": "tsc"
+		"build": "tsc",
+		"watch": "tsc -w",
+		"serve": "node out/api/server.js"
 	},
 	"dependencies": {
 		"body-parse": "^0.1.0",
