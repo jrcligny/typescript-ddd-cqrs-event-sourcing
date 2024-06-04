@@ -1,11 +1,15 @@
+// domain
 import { Reservation, } from './Reservation.js'
 
+// framework types
 import type { IEvent, } from '../framework/Event.js'
 import type { IAggregateFactory, } from '../framework/AggregateFactory.js'
 
+//#region interface
 interface IReservationFactory extends IAggregateFactory<Reservation> {
 }
-export type { IReservationFactory, }
+export type { IReservationFactory }
+//#endregion interface
 
 export class ReservationFactory implements IReservationFactory {
 

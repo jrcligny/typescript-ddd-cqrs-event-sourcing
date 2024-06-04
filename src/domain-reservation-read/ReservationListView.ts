@@ -1,12 +1,16 @@
+// domain
 import { ReservationCreated, } from '../domain-reservation-write/events/ReservationCreated.js'
 import { GetAllReservations, } from './queries/GetAllReservations.js'
 import { ReservationListRecord, } from './ReservationListRecord.js'
 
+// framework types
 import type { IEventBus, } from '../framework/EventBus.js'
 import type { IQueryBus, } from '../framework/QueryBus.js'
+// domain types
 import type { IGetAllReservations, } from './queries/GetAllReservations.js'
 import type { IReservationListRecord, } from './ReservationListRecord.js'
 
+//#region interface
 interface IReservationListView {
 	// events
 	registerToEventBus(eventBus: IEventBus): void
@@ -16,6 +20,7 @@ interface IReservationListView {
 	handleGetAllReservations(query: IGetAllReservations): IReservationListRecord[]
 }
 export type { IReservationListView }
+//#endregion interface
 
 export class ReservationListView implements IReservationListView {
 
@@ -23,7 +28,18 @@ export class ReservationListView implements IReservationListView {
 
 	//#region event handlers
 	public registerToEventBus(eventBus: IEventBus): void {
-		eventBus.registerHandler(ReservationCreated.name, this.handleReservationCreated.bind(this))
+		this.subscribeEvent(ReservationCreated.name, eventBus)
+	}
+
+	protected subscribeEvent(eventName: string, eventBus: IEventBus): void {
+		const handler = this[`handle${eventName}` as keyof this]
+		if (typeof handler !== 'function')
+		{
+			throw new Error(
+				`Could not find handle${eventName} in ${this.constructor.name}.`
+			)
+		}
+		eventBus.registerHandler(eventName, handler.bind(this))
 	}
 
 	public handleReservationCreated(event: ReservationCreated): void {

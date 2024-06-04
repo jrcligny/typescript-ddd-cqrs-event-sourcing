@@ -1,7 +1,20 @@
+// framework
 import { Command, } from '../../framework/Command.js'
 
-export class CreateReservation extends Command {
+// framework types
+import type { ICommand, } from '../../framework/Command.js'
 
+//#region interface
+interface ICreateReservation extends ICommand {
+	readonly roomId: string
+	readonly startDate: Date
+	readonly endDate: Date
+	readonly price: number
+}
+export type { ICreateReservation }
+//#endregion interface
+
+export class CreateReservation extends Command implements ICreateReservation {
 	constructor (
 		reservationId: string,
 		public readonly roomId: string,

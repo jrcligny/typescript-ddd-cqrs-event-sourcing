@@ -1,7 +1,17 @@
+// framework
 import { Event, } from '../../framework/Event.js'
 
-export class OccupancySet extends Event {
+// framework types
+import type { IEvent } from '../../framework/Event.js'
 
+//#region interface
+interface IOccupancySet extends IEvent {
+	readonly numberOfGuests: number
+}
+export type { IOccupancySet }
+//#endregion interface
+
+export class OccupancySet extends Event implements IOccupancySet {
 	constructor (
 		reservationId: string,
 		public readonly numberOfGuests: number

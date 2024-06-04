@@ -5,16 +5,16 @@ import { Command, } from '../../framework/Command.js'
 import type { ICommand, } from '../../framework/Command.js'
 
 //#region interface
-interface ISetOccupancy extends ICommand {
-	readonly numberOfGuests: number
+interface IRemoveAdditionalService extends ICommand {
+	readonly serviceId: string
 }
-export type { ISetOccupancy }
+export type { IRemoveAdditionalService }
 //#endregion interface
 
-export class SetOccupancy extends Command implements ISetOccupancy {
+export class RemoveAdditionalService extends Command implements IRemoveAdditionalService {
 	constructor (
 		reservationId: string,
-		public readonly numberOfGuests: number,
+		public readonly serviceId: string,
 		expectedReservationVersion: number
 	) {
 		super(reservationId, expectedReservationVersion)
