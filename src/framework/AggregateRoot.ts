@@ -87,13 +87,14 @@ export abstract class AggregateRoot {
 	 * @param isNew - Indicates whether the change is new or not.
 	 */
 	private applyChangeInternal(event: IEvent, isNew = false): void {
-		if (!(this as any)[`apply${event.constructor.name}`]) {
+		const handler = this[`apply${event.constructor.name}` as keyof this]
+		if (typeof handler !== 'function') {
 			throw new Error(
 				`No handler found for ${event.constructor.name}. Be sure to define a method called apply${event.constructor.name} on the aggregate.`
 			)
 		}
 
-		(this as any)[`apply${event.constructor.name}`](event)
+		handler(event)
 		this.version += 1
 
 		if (isNew) {
