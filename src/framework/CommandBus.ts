@@ -8,16 +8,13 @@ import type { ICommand, } from './Command.js'
  * It also provides a method to send commands.
  */
 interface ICommandBus {
-
 	/**
-	 * Registers command handlers for multiple command names.
-	 * @param commandNames The names of the commands to register the handler for.
-	 * @param commandHandler The command handler object.
+	 * Registers a command handler for a specific command name.
+	 * @param commandName The name of the command to register the handler for.
+	 * @param handler The command handler function.
+	 * @param thisArg The instance to bind the handler to.
 	 */
-	registerHandlers(
-		commandNames: string[],
-		handlers: any
-	): void
+	registerHandler(commandName: string, handler: any, thisArg: any): void
 
 	/**
 	 * Sends a command to its corresponding command handler.
@@ -38,39 +35,8 @@ export class CommandBus implements ICommandBus {
 	 */
 	private readonly handlersFor: { [key:string]: any } = {}
 
-	/**
-	 * Registers command handlers for multiple command names.
-	 * @param commandNames The names of the commands to register the handler for.
-	 * @param commandHandler The command handler object. It must have a method for each command name matching the pattern handle{CommandName}.
-	 * @throws Error if the handler does not have a method for the command.
-	 * 
-	 * @example
-	 * ```typescript
-	 * messageBus.registerHandlers(
-	 * 	[
-	 * 		'CreateOrder',
-	 * 		'UpdateOrder'
-	 * 	],
-	 * 	{
-	 * 		handleCreateOrder: (command: CreateOrder) => { ... },
-	 * 		handleUpdateOrder: (command: UpdateOrder) => { ... }
-	 * 	}
-	 * )
-	 * ```
-	 */
-	public registerHandlers(
-		commandNames: string[],
-		commandHandler: any
-	): void {
-		commandNames.forEach((commandName) => {
-			if (!commandHandler[`handle${commandName}`])
-			{
-				throw new Error(
-					`Could not find handle${commandName} in ${commandHandler.constructor.name}.`
-				)
-			}
-			this.handlersFor[commandName] = commandHandler[`handle${commandName}`]
-		})
+	public registerHandler(commandName: string, handler: any, thisArg: any): void {
+		this.handlersFor[commandName] = handler.bind(thisArg)
 	}
 
 	/**

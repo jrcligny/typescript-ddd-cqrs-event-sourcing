@@ -8,15 +8,16 @@ import type { IMessage, } from './Message.js'
  * It also provides a method to send queries.
  */
 interface IQueryBus {
-
 	/**
-	 * Registers query handlers for multiple query names.
-	 * @param queryNames The names of the queries to register the handler for.
-	 * @param queryHandler The query handler object.
+	 * Registers a query handler for a specific query name.
+	 * @param queryName The name of the query to register the handler for.
+	 * @param handler The query handler function.
+	 * @param thisArg The instance to bind the handler to.
 	 */
-	registerHandlers(
-		queryNames: string[],
-		handlers: any
+	registerHandler(
+		queryName: string,
+		handler: any,
+		thisArg: any
 	): void
 
 	/**
@@ -38,39 +39,8 @@ export class QueryBus implements IQueryBus {
 	 */
 	private readonly handlersFor: { [key:string]: any } = {}
 
-	/**
-	 * Registers query handlers for multiple query names.
-	 * @param queryNames The names of the queries to register the handler for.
-	 * @param queryHandler The query handler object. It must have a method for each query name matching the pattern handle{QueryName}.
-	 * @throws Error if the handler does not have a method for the query.
-	 * 
-	 * @example
-	 * ```typescript
-	 * messageBus.registerHandlers(
-	 * 	[
-	 * 		'CreateOrder',
-	 * 		'UpdateOrder'
-	 * 	],
-	 * 	{
-	 * 		handleCreateOrder: (query: CreateOrder) => { ... },
-	 * 		handleUpdateOrder: (query: UpdateOrder) => { ... }
-	 * 	}
-	 * )
-	 * ```
-	 */
-	public registerHandlers(
-		queryNames: string[],
-		queryHandler: any
-	): void {
-		queryNames.forEach((queryName) => {
-			if (!queryHandler[`handle${queryName}`])
-			{
-				throw new Error(
-					`Could not find handle${queryName} in ${queryHandler.constructor.name}.`
-				)
-			}
-			this.handlersFor[queryName] = queryHandler[`handle${queryName}`]
-		})
+	public registerHandler(queryName: string, handler: any, thisArg: any): void {
+		this.handlersFor[queryName] = handler.bind(thisArg)
 	}
 
 	/**

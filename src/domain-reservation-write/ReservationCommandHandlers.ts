@@ -36,17 +36,23 @@ export class ReservationCommandHandlers implements IReservationCommandHandlers {
 		private readonly repository: IReservationRepository
 	) {}
 
-	public registerToMessageBus(messageBus: ICommandBus): void {
-		messageBus.registerHandlers(
-			[
-				CreateReservation.name,
-				SetOccupancy.name,
-				AddAdditionalService.name,
-				RemoveAdditionalService.name,
-				SetSpecialRequest.name,
-			],
-			this
-		)
+	public registerToMessageBus(commandBus: ICommandBus): void {
+		this.subscribeCommand(CreateReservation.name, commandBus)
+		this.subscribeCommand(SetOccupancy.name, commandBus)
+		this.subscribeCommand(AddAdditionalService.name, commandBus)
+		this.subscribeCommand(RemoveAdditionalService.name, commandBus)
+		this.subscribeCommand(SetSpecialRequest.name, commandBus)
+	}
+
+	protected subscribeCommand(commandName: string, commandBus: ICommandBus): void {
+		const handler = this[`handle${commandName}` as keyof this]
+		if (typeof handler !== 'function')
+		{
+			throw new Error(
+				`Could not find handle${commandName} in ${this.constructor.name}.`
+			)
+		}
+		commandBus.registerHandler(commandName, this[`handle${commandName}` as keyof this], this)
 	}
 
 	public handleCreateReservation(command: ICreateReservation): void {

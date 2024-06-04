@@ -103,9 +103,18 @@ export class ReservationListView implements IReservationListView {
 
 	//#region query handlers
 	public registerToQueryBus(queryBus: IQueryBus): void {
-		queryBus.registerHandlers([
-			GetAllReservations.name,
-		], this)
+		this.subscribeQuery(GetAllReservations.name, queryBus)
+	}
+
+	protected subscribeQuery(queryName: string, queryBus: IQueryBus): void {
+		const handler = this[`handle${queryName}` as keyof this]
+		if (typeof handler !== 'function')
+		{
+			throw new Error(
+				`Could not find handle${queryName} in ${this.constructor.name}.`
+			)
+		}
+		queryBus.registerHandler(queryName, this[`handle${queryName}` as keyof this], this)
 	}
 
 	public handleGetAllReservations(query: IGetAllReservations): IReservationListRecord[] {

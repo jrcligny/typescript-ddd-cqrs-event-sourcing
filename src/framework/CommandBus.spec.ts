@@ -9,30 +9,23 @@ describe('CommandBus', () => {
 		messageBus = new CommandBus()
 	})
 
-	describe('registerCommandHandlers', () => {
+	describe('registerHandler', () => {
 
-		it('should register command handlers', () => {
+		it('should register command handler', () => {
 			// Arrange
-			const commandNames = ['TestCommand1', 'TestCommand2']
-			const commandHandler = { handleTestCommand1: jest.fn(), handleTestCommand2: jest.fn() }
+			const commandHandler = {
+				handleTestCommand1: function handleTestCommand1() {},
+				handleTestCommand2: function handleTestCommand2() {}
+			}
+			const thisArg = {}
 
 			// Act
-			messageBus.registerHandlers(commandNames, commandHandler)
+			messageBus.registerHandler('TestCommand1', commandHandler.handleTestCommand1, thisArg)
+			messageBus.registerHandler('TestCommand2', commandHandler.handleTestCommand2, thisArg)
 
 			// Assert
-			expect(messageBus['handlersFor']['TestCommand1']).toBe(commandHandler.handleTestCommand1)
-			expect(messageBus['handlersFor']['TestCommand2']).toBe(commandHandler.handleTestCommand2)
-		})
-
-		it('should throw an error if a handler is not found', () => {
-			// Arrange
-			const commandNames = ['TestCommand']
-			const commandHandler = { constructor: { name: 'CommandHandler'} }
-
-			// Act & Assert
-			expect(() => messageBus.registerHandlers(commandNames, commandHandler)).toThrow(
-				`Could not find handleTestCommand in CommandHandler.`
-			)
+			expect(messageBus['handlersFor']['TestCommand1'].name).toBe('bound handleTestCommand1')
+			expect(messageBus['handlersFor']['TestCommand2'].name).toBe('bound handleTestCommand2')
 		})
 	})
 
@@ -41,14 +34,14 @@ describe('CommandBus', () => {
 		it('should send a command', () => {
 			// Arrange
 			const command = <ICommand>{ constructor: { name: 'TestCommand' } }
-			const commandHandler = { handleTestCommand: jest.fn() }
-			messageBus.registerHandlers(['TestCommand'], commandHandler)
+			const commandHandler = jest.fn()
+			messageBus.registerHandler('TestCommand', commandHandler, {})
 
 			// Act
 			messageBus.send(command)
 
 			// Assert
-			expect(commandHandler.handleTestCommand).toHaveBeenCalledWith(command)
+			expect(commandHandler).toHaveBeenCalledWith(command)
 		})
 
 		it('should throw an error if no handler is found', () => {

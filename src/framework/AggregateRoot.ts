@@ -94,7 +94,7 @@ export abstract class AggregateRoot {
 			)
 		}
 
-		handler(event)
+		handler.call(this, event)
 		this.version += 1
 
 		if (isNew) {
