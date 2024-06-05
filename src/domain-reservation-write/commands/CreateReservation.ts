@@ -6,9 +6,9 @@ import type { ICommand, } from '../../framework/Command.js'
 
 //#region interface
 interface ICreateReservation extends ICommand {
-	readonly roomId: string
-	readonly startDate: Date
-	readonly endDate: Date
+	readonly houseId: string
+	readonly arrivalDate: Date
+	readonly departureDate: Date
 	readonly price: number
 }
 export type { ICreateReservation }
@@ -17,9 +17,9 @@ export type { ICreateReservation }
 export class CreateReservation extends Command implements ICreateReservation {
 	constructor (
 		reservationId: string,
-		public readonly roomId: string,
-		public readonly startDate: Date,
-		public readonly endDate: Date,
+		public readonly houseId: string,
+		public readonly arrivalDate: Date,
+		public readonly departureDate: Date,
 		public readonly price: number
 	) {
 		super(reservationId, -1)

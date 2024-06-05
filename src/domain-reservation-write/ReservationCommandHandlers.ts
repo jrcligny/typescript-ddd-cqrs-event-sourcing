@@ -1,5 +1,7 @@
 // domain
 import { AddAdditionalService, } from './commands/AddAdditionalService.js'
+import { CancelReservation, } from './commands/CancelReservation.js'
+import { ConfirmReservation, } from './commands/ConfirmReservation.js'
 import { CreateReservation, } from './commands/CreateReservation.js'
 import { RemoveAdditionalService, } from './commands/RemoveAdditionalService.js'
 import { SetOccupancy, } from './commands/SetOccupancy.js'
@@ -11,6 +13,8 @@ import type { ICommandBus, } from '../framework/CommandBus.js'
 import type { IReservationFactory, } from './ReservationFactory.js'
 import type { IReservationRepository, } from './ReservationRepository.js'
 import type { IAddAdditionalService, } from './commands/AddAdditionalService.js'
+import type { ICancelReservation } from './commands/CancelReservation.js'
+import type { IConfirmReservation, } from './commands/ConfirmReservation.js'
 import type { ICreateReservation, } from './commands/CreateReservation.js'
 import type { IRemoveAdditionalService, } from './commands/RemoveAdditionalService.js'
 import type { ISetOccupancy, } from './commands/SetOccupancy.js'
@@ -25,6 +29,8 @@ interface IReservationCommandHandlers {
 	handleAddAdditionalService(command: IAddAdditionalService): void
 	handleRemoveAdditionalService(command: IRemoveAdditionalService): void
 	handleSetSpecialRequest(command: ISetSpecialRequest): void
+	handleConfirmReservation(command: IConfirmReservation): void
+	handleCancelReservation(command: ICancelReservation): void
 }
 export type { IReservationCommandHandlers }
 //#endregion interface
@@ -42,6 +48,7 @@ export class ReservationCommandHandlers implements IReservationCommandHandlers {
 		this.subscribeCommand(AddAdditionalService.name, commandBus)
 		this.subscribeCommand(RemoveAdditionalService.name, commandBus)
 		this.subscribeCommand(SetSpecialRequest.name, commandBus)
+		this.subscribeCommand(CancelReservation.name, commandBus)
 	}
 
 	protected subscribeCommand(commandName: string, commandBus: ICommandBus): void {
@@ -56,10 +63,10 @@ export class ReservationCommandHandlers implements IReservationCommandHandlers {
 	}
 
 	public handleCreateReservation(command: ICreateReservation): void {
-		const { aggregateId, roomId, startDate, endDate, price } = command
+		const { aggregateId, houseId, arrivalDate, departureDate, price } = command
 
 		const reservation = this.factory.create(
-			aggregateId, roomId, startDate, endDate, price
+			aggregateId, houseId, arrivalDate, departureDate, price
 		)
 
 		this.repository.save(reservation, -1)
@@ -98,6 +105,24 @@ export class ReservationCommandHandlers implements IReservationCommandHandlers {
 		const reservation = this.repository.getById(aggregateId)
 
 		reservation.setSpecialRequest(specialRequest)
+		this.repository.save(reservation, expectedAggregateVersion)
+	}
+
+	public handleConfirmReservation(command: IConfirmReservation): void {
+		const { aggregateId, expectedAggregateVersion } = command
+
+		const reservation = this.repository.getById(aggregateId)
+
+		reservation.confirm()
+		this.repository.save(reservation, expectedAggregateVersion)
+	}
+
+	handleCancelReservation(command: ICancelReservation): void {
+		const { aggregateId, expectedAggregateVersion } = command
+
+		const reservation = this.repository.getById(aggregateId)
+
+		reservation.cancel()
 		this.repository.save(reservation, expectedAggregateVersion)
 	}
 }

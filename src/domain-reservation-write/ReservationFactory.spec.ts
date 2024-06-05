@@ -13,18 +13,18 @@ describe('ReservationFactory', () => {
 		// Arrange
 		const id = '1'
 		const houseId = 'house1'
-		const startDate = new Date()
-		const endDate = new Date()
+		const arrivalDate = new Date()
+		const departureDate = new Date()
 		const price = 100
 
 		// Act
-		const reservation = factory.create(id, houseId, startDate, endDate, price)
+		const reservation = factory.create(id, houseId, arrivalDate, departureDate, price)
 
 		// Assert
 		expect(reservation.getId()).toEqual(id)
 		expect(reservation.houseId).toEqual(houseId)
-		expect(reservation.startDate).toEqual(startDate)
-		expect(reservation.endDate).toEqual(endDate)
+		expect(reservation.arrivalDate).toEqual(arrivalDate)
+		expect(reservation.departureDate).toEqual(departureDate)
 		expect(reservation.price).toEqual(price)
 
 		expect(reservation.getVersion()).toEqual(1)

@@ -8,6 +8,7 @@ interface IReservationListRecord {
 	numberOfGuests: number
 	hasSpecialRequest: boolean
 	numberOfAdditionalServices: number
+	status: 'Created' | 'Confirmed' | 'Canceled'
 }
 export type { IReservationListRecord }
 
@@ -22,5 +23,6 @@ export class ReservationListRecord implements IReservationListRecord {
 		public numberOfGuests: number,
 		public hasSpecialRequest: boolean,
 		public numberOfAdditionalServices: number,
+		public status: 'Created' | 'Confirmed' | 'Canceled',
 	) {}
 }

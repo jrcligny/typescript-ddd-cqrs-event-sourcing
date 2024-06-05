@@ -16,12 +16,12 @@ export class ReservationFactory implements IReservationFactory {
 	public create(
 		id: string,
 		houseId: string,
-		startDate: Date,
-		endDate: Date,
+		arrivalDate: Date,
+		departureDate: Date,
 		price: number
 	): Reservation {
 		const reservation = new Reservation()
-		reservation.create(id, houseId, startDate, endDate, price)
+		reservation.create(id, houseId, arrivalDate, departureDate, price)
 		return reservation
 	}
 

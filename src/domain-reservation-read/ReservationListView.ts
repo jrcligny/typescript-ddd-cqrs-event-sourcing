@@ -2,10 +2,12 @@
 import { AdditionalServiceAdded, } from '../domain-reservation-write/events/AdditionalServiceAdded.js'
 import { AdditionalServiceRemoved, } from '../domain-reservation-write/events/AdditionalServiceRemoved.js'
 import { OccupancySet, } from '../domain-reservation-write/events/OccupancySet.js'
-import { IReservationCreated, ReservationCreated, } from '../domain-reservation-write/events/ReservationCreated.js'
+import { ReservationCanceled, } from '../domain-reservation-write/events/ReservationCanceled.js'
+import { ReservationConfirmed, } from '../domain-reservation-write/events/ReservationConfirmed.js'
+import { ReservationCreated, } from '../domain-reservation-write/events/ReservationCreated.js'
 import { SpecialRequestSet, } from '../domain-reservation-write/events/SpecialRequestSet.js'
-import { ReservationListRecord, } from './ReservationListRecord.js'
 import { GetAllReservations, } from './queries/GetAllReservations.js'
+import { ReservationListRecord, } from './record/ReservationListRecord.js'
 
 // framework types
 import type { IEventBus, } from '../framework/EventBus.js'
@@ -14,9 +16,12 @@ import type { IQueryBus, } from '../framework/QueryBus.js'
 import type { IAdditionalServiceAdded } from '../domain-reservation-write/events/AdditionalServiceAdded.js'
 import type { IAdditionalServiceRemoved } from '../domain-reservation-write/events/AdditionalServiceRemoved.js'
 import type { IOccupancySet, } from '../domain-reservation-write/events/OccupancySet.js'
+import type { IReservationCanceled, } from '../domain-reservation-write/events/ReservationCanceled.js'
+import type { IReservationConfirmed, } from '../domain-reservation-write/events/ReservationConfirmed.js'
+import type { IReservationCreated, } from '../domain-reservation-write/events/ReservationCreated.js'
 import type { ISpecialRequestSet, } from '../domain-reservation-write/events/SpecialRequestSet.js'
-import type { IReservationListRecord, } from './ReservationListRecord.js'
 import type { IGetAllReservations, } from './queries/GetAllReservations.js'
+import type { IReservationListRecord, } from './record/ReservationListRecord.js'
 
 //#region interface
 interface IReservationListView {
@@ -41,6 +46,8 @@ export class ReservationListView implements IReservationListView {
 		this.subscribeEvent(AdditionalServiceRemoved.name, eventBus)
 		this.subscribeEvent(OccupancySet.name, eventBus)
 		this.subscribeEvent(SpecialRequestSet.name, eventBus)
+		this.subscribeEvent(ReservationConfirmed.name, eventBus)
+		this.subscribeEvent(ReservationCanceled.name, eventBus)
 	}
 
 	protected subscribeEvent(eventName: string, eventBus: IEventBus): void {
@@ -59,12 +66,13 @@ export class ReservationListView implements IReservationListView {
 			event.aggregateId,
 			event.houseId,
 			undefined, // guestId
-			event.startDate,
-			event.endDate,
+			event.arrivalDate,
+			event.departureDate,
 			event.price,
 			1, // numberOfGuests
 			false, // hasSpecialRequest
 			0, // numberOfAdditionalServices
+			'Created'
 		))
 	}
 
@@ -97,6 +105,22 @@ export class ReservationListView implements IReservationListView {
 		if (reservation)
 		{
 			reservation.hasSpecialRequest = event.message ? true : false
+		}
+	}
+
+	public handleReservationConfirmed(event: IReservationConfirmed): void {
+		const reservation = this.reservations.get(event.aggregateId)
+		if (reservation)
+		{
+			reservation.status = 'Confirmed'
+		}
+	}
+
+	public handleReservationCanceled(event: IReservationCanceled): void {
+		const reservation = this.reservations.get(event.aggregateId)
+		if (reservation)
+		{
+			reservation.status = 'Canceled'
 		}
 	}
 	//#endregion event handlers

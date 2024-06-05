@@ -53,7 +53,7 @@ export class EventStore implements IEventStore {
 	/**
 	 * The events stored grouped by aggregate ID.
 	 */
-	public readonly events: { [key: string]: EventDescriptor[] } = {}
+	private readonly events: { [key: string]: EventDescriptor[] } = {}
 
 	/**
 	 * Creates a new instance of the EventStore class.
