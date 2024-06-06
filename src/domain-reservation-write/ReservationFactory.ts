@@ -1,9 +1,9 @@
 // domain
 import { Reservation, } from './Reservation.js'
 
-// framework types
-import type { IEvent, } from '../framework/Event.js'
-import type { IAggregateFactory, } from '../framework/AggregateFactory.js'
+// core types
+import type { IEvent, } from '../core/message-bus/Event.js'
+import type { IAggregateFactory, } from '../core/AggregateFactory.js'
 
 //#region interface
 interface IReservationFactory extends IAggregateFactory<Reservation> {

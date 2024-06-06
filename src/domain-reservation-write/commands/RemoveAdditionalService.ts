@@ -1,8 +1,8 @@
-// framework
-import { Command, } from '../../framework/Command.js'
+// core
+import { Command, } from '../../core/message-bus/Command.js'
 
-// framework types
-import type { ICommand, } from '../../framework/Command.js'
+// core types
+import type { ICommand, } from '../../core/message-bus/Command.js'
 
 //#region interface
 interface IRemoveAdditionalService extends ICommand {

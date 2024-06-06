@@ -1,6 +1,6 @@
 import type { IAggregateFactory, } from './AggregateFactory.js'
 import type { AggregateRoot, } from './AggregateRoot.js'
-import type { IEventStore, } from './EventStore.js'
+import type { IEventStore, } from './event-store/EventStore.js'
 
 /**
  * Represents a repository for storing and retrieving aggregate roots.

@@ -1,5 +1,5 @@
-import type { IEvent, } from './Event.js'
-import type { IEventBus, } from './EventBus.js'
+import type { IEvent, } from '../message-bus/Event.js'
+import type { IEventBus, } from '../message-bus/EventBus.js'
 
 /**
  * Represents an event store that stores and retrieves events for aggregates.

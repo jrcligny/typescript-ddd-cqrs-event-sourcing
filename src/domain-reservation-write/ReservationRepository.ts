@@ -1,5 +1,5 @@
-// framework types
-import type { IRepository } from '../framework/Repository.js'
+// core types
+import type { IRepository } from '../core/Repository.js'
 
 // domain types
 import type { Reservation } from './Reservation.js'

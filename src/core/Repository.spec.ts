@@ -2,8 +2,8 @@ import { Repository, } from './Repository.js'
 
 import type { IAggregateFactory, } from './AggregateFactory.js'
 import type { AggregateRoot, } from './AggregateRoot.js'
-import type { IEvent, } from './Event.js'
-import type { IEventStore, } from './EventStore.js'
+import type { IEvent, } from './message-bus/Event.js'
+import type { IEventStore, } from './event-store/EventStore.js'
 
 describe('Repository', () => {
 	let repository: Repository<AggregateRoot>

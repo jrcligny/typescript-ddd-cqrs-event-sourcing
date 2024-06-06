@@ -1,5 +1,6 @@
 import type { IMessage, } from './Message.js'
 
+//#region interface
 /**
  * Represents a message bus that handles queries.
  * 
@@ -26,7 +27,8 @@ interface IQueryBus {
 	 */
 	send<T extends IMessage, U>(query: T): Promise<U>
 }
-export type { IQueryBus, }
+export type { IQueryBus }
+//#endregion interface
 
 /**
  * Represents a message bus that handles events and queries.

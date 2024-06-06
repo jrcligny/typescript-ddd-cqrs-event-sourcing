@@ -7,8 +7,8 @@ import { RemoveAdditionalService, } from './commands/RemoveAdditionalService.js'
 import { SetOccupancy, } from './commands/SetOccupancy.js'
 import { SetSpecialRequest, } from './commands/SetSpecialRequest.js'
 
-// framework types
-import type { ICommandBus, } from '../framework/CommandBus.js'
+// core types
+import type { ICommandBus, } from '../core/message-bus/CommandBus.js'
 // domain types
 import type { IReservationFactory, } from './ReservationFactory.js'
 import type { IReservationRepository, } from './ReservationRepository.js'

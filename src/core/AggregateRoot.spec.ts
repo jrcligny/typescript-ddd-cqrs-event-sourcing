@@ -1,6 +1,6 @@
 import { AggregateRoot, } from './AggregateRoot.js'
 
-import type { IEvent, } from './Event.js'
+import type { IEvent, } from './message-bus/Event.js'
 
 class TestAggregateRoot extends AggregateRoot {
 	callEvent(): void

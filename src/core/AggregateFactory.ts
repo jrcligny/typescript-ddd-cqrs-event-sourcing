@@ -1,4 +1,4 @@
-import type { IEvent, } from './Event.js'
+import type { IEvent, } from './message-bus/Event.js'
 
 interface IAggregateFactory<T> {
 

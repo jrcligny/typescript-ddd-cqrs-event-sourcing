@@ -9,9 +9,9 @@ import { SpecialRequestSet, } from '../domain-reservation-write/events/SpecialRe
 import { GetAllReservations, } from './queries/GetAllReservations.js'
 import { ReservationListRecord, } from './record/ReservationListRecord.js'
 
-// framework types
-import type { IEventBus, } from '../framework/EventBus.js'
-import type { IQueryBus, } from '../framework/QueryBus.js'
+// core types
+import type { IEventBus, } from '../core/message-bus/EventBus.js'
+import type { IQueryBus, } from '../core/message-bus/QueryBus.js'
 // domain types
 import type { IAdditionalServiceAdded } from '../domain-reservation-write/events/AdditionalServiceAdded.js'
 import type { IAdditionalServiceRemoved } from '../domain-reservation-write/events/AdditionalServiceRemoved.js'

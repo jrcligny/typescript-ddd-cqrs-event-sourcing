@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-// framework
-import { EventStore, } from '../framework/EventStore.js'
-import { EventBus, } from '../framework/EventBus.js'
+// core
+import { EventStore, } from '../core/event-store/EventStore.js'
+import { EventBus, } from '../core/message-bus/EventBus.js'
 // api
 import { instantiate as instantiateQueryReservationController, } from './ReservationReadController.js'
 import { instanciate as instantiateCommandReservationController, } from './ReservationWriteController.js'

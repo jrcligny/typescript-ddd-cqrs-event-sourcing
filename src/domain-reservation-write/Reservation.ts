@@ -1,5 +1,5 @@
-// framework
-import { AggregateRoot, } from '../framework/AggregateRoot.js'
+// core
+import { AggregateRoot, } from '../core/AggregateRoot.js'
 // domain
 import { AdditionalServiceAdded, } from './events/AdditionalServiceAdded.js'
 import { AdditionalServiceRemoved, } from './events/AdditionalServiceRemoved.js'

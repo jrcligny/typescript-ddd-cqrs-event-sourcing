@@ -1,7 +1,7 @@
 // node
 import { check, matchedData, validationResult, } from 'express-validator'
-// framework
-import { QueryBus, } from '../framework/QueryBus.js'
+// core
+import { QueryBus, } from '../core/message-bus/QueryBus.js'
 // domain
 import { HouseUnavailabilityView } from '../domain-reservation-read/HouseUnavailabilityView.js'
 import { ReservationListView, } from '../domain-reservation-read/ReservationListView.js'
@@ -11,8 +11,8 @@ import { IsHouseAvailable, } from '../domain-reservation-read/queries/IsHouseAva
 // node types
 import type { Express, } from 'express'
 import type { Request, Response, } from 'express-serve-static-core'
-// framework types
-import type { IEventBus } from '../framework/EventBus.js'
+// core types
+import type { IEventBus } from '../core/message-bus/EventBus.js'
 // domain types
 import type { IReservationListRecord } from '../domain-reservation-read/record/ReservationListRecord.js'
 import type { IGetAllReservations, } from '../domain-reservation-read/queries/GetAllReservations.js'

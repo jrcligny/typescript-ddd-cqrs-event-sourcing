@@ -1,8 +1,8 @@
 // node
 import { body, matchedData, validationResult, } from 'express-validator'
-// framework
-import { CommandBus, } from '../framework/CommandBus.js'
-import { Repository, } from '../framework/Repository.js'
+// core
+import { CommandBus, } from '../core/message-bus/CommandBus.js'
+import { Repository, } from '../core/Repository.js'
 // domain
 import { ReservationCommandHandlers, } from '../domain-reservation-write/ReservationCommandHandlers.js'
 import { ReservationFactory, } from '../domain-reservation-write/ReservationFactory.js'
@@ -17,8 +17,8 @@ import { SetSpecialRequest, } from '../domain-reservation-write/commands/SetSpec
 // node types
 import type { Express, } from 'express'
 import type { Request, Response, } from 'express-serve-static-core'
-// framework types
-import type { IEventStore, } from '../framework/EventStore.js'
+// core types
+import type { IEventStore, } from '../core/event-store/EventStore.js'
 
 export function instanciate(eventStore: IEventStore, app: Express)
 {

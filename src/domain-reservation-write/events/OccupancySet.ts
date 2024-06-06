@@ -1,8 +1,8 @@
-// framework
-import { Event, } from '../../framework/Event.js'
+// core
+import { Event, } from '../../core/message-bus/Event.js'
 
-// framework types
-import type { IEvent } from '../../framework/Event.js'
+// core types
+import type { IEvent } from '../../core/message-bus/Event.js'
 
 //#region interface
 interface IOccupancySet extends IEvent {

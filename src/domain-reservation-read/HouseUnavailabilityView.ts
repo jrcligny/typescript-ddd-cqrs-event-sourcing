@@ -4,9 +4,9 @@ import { ReservationCreated, } from '../domain-reservation-write/events/Reservat
 import { IsHouseAvailable, } from './queries/IsHouseAvailable.js'
 import { HouseUnavailabilityRecord, } from './record/HouseUnavailabilityRecord.js'
 
-// framework types
-import type { IEventBus, } from '../framework/EventBus.js'
-import type { IQueryBus, } from '../framework/QueryBus.js'
+// core types
+import type { IEventBus, } from '../core/message-bus/EventBus.js'
+import type { IQueryBus, } from '../core/message-bus/QueryBus.js'
 // domain types
 import type { IReservationCanceled, } from '../domain-reservation-write/events/ReservationCanceled.js'
 import type { IReservationCreated, } from '../domain-reservation-write/events/ReservationCreated.js'

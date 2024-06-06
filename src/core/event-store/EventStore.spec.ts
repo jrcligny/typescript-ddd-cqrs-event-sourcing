@@ -1,7 +1,7 @@
 import { EventStore, } from './EventStore.js'
 
-import type { IEvent, } from './Event.js'
-import type { IEventBus, } from './EventBus.js'
+import type { IEvent, } from '../message-bus/Event.js'
+import type { IEventBus, } from '../message-bus/EventBus.js'
 
 describe('EventStore', () => {
 	let eventStore: EventStore

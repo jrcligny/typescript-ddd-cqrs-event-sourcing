@@ -1,6 +1,6 @@
 import type { IEvent, } from './Event.js'
-import type { IMessage, } from './Message.js'
 
+//#region interface
 /**
  * Represents a message bus that handles events.
  * 
@@ -27,6 +27,7 @@ interface IEventBus {
 	publish<T extends IEvent>(event: T): void
 }
 export type { IEventBus }
+//#endregion interface
 
 /**
  * Represents a message bus that handles events.
