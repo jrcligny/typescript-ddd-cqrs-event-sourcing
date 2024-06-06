@@ -1,5 +1,5 @@
 // node
-import { body, matchedData, validationResult, } from 'express-validator'
+import { body, matchedData, param, validationResult, } from 'express-validator'
 // core
 import { CommandBus, } from '../core/message-bus/CommandBus.js'
 import { Repository, } from '../core/Repository.js'
@@ -70,6 +70,7 @@ export function instanciate(eventStore: IEventStore, app: Express)
 	 * Register a post request to set the occupancy of a reservation
 	 */
 	app.post('/reservation/:id/occupancy', [
+		param('id').isString().withMessage('id must be a string'),
 		body('numberOfGuests').isInt().withMessage('numberOfGuests must be an integer'),
 		body('expectedAggregateVersion').isInt().withMessage('expectedAggregateVersion must be an integer'),
 	], (req: Request, res: Response) => {

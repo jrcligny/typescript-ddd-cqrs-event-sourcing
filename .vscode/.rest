@@ -14,4 +14,14 @@ GET http://localhost:3000/reservations
 
 ###
 
+POST http://localhost:3000/reservation/dvxtz3cn9/occupancy
+content-type: application/json
+
+{
+	"numberOfGuests": "2",
+	"expectedAggregateVersion": 0
+}
+
+###
+
 GET http://localhost:3000/house/1/availability?arrivalDate=2025-01-01&departureDate=2025-01-10

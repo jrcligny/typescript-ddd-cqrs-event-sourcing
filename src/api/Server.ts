@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 // core
-import { EventStore, } from '../core/event-store/EventStore.js'
+import { JSONFileEventStore, } from '../core/event-store/JSONFileEventStore.js'
 import { EventBus, } from '../core/message-bus/EventBus.js'
 // api
 import { instantiate as instantiateQueryReservationController, } from './ReservationReadController.js'
@@ -11,7 +11,7 @@ const app = express()
 app.use(bodyParser.json())
 
 const eventBus = new EventBus()
-const eventStore = new EventStore(eventBus)
+const eventStore = new JSONFileEventStore(eventBus, './out/data/')
 
 instantiateCommandReservationController(eventStore, app)
 instantiateQueryReservationController(eventBus, app)

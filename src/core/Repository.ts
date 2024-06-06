@@ -14,7 +14,7 @@ interface IRepository<T extends AggregateRoot> {
 	 * @param aggregate - The aggregate root to be saved.
 	 * @param expectedVersion - The expected version of the aggregate root to ensure optimistic concurrency.
 	 */
-	save(aggregate: T, expectedVersion: number): void
+	save(aggregate: T, expectedVersion: number): Promise<void>
 
 	/**
 	 * Retrieves an aggregate root by its unique identifier.
@@ -22,7 +22,7 @@ interface IRepository<T extends AggregateRoot> {
 	 * @param id - The unique identifier of the aggregate root.
 	 * @returns The retrieved aggregate root.
 	 */
-	getById(id: string): T
+	getById(id: string): Promise<T>
 }
 export type { IRepository }
 
@@ -44,13 +44,13 @@ export class Repository<T extends AggregateRoot> implements IRepository<T> {
 		private readonly factory: IAggregateFactory<T>,
 	) { }
 
-	save(aggregate: T, expectedVersion: number): void {
-		this.storage.saveEvents(aggregate.getId(), aggregate.getUncommittedChanges(), expectedVersion)
+	public async save(aggregate: T, expectedVersion: number): Promise<void> {
+		await this.storage.saveEvents(aggregate.getId(), aggregate.getUncommittedChanges(), expectedVersion)
 		aggregate.markChangesAsCommitted()
 	}
 
-	getById(id: string): T {
-		const history = this.storage.getEventsForAggregate(id)
+	public async getById(id: string): Promise<T> {
+		const history = await this.storage.getEventsForAggregate(id)
 		return this.factory.loadFromHistory(history)
 	}
 }

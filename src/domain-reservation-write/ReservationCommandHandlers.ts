@@ -24,13 +24,13 @@ import type { ISetSpecialRequest, } from './commands/SetSpecialRequest.js'
 interface IReservationCommandHandlers {
 	registerToMessageBus(messageBus: ICommandBus): void
 
-	handleCreateReservation(command: ICreateReservation): void
-	handleSetOccupancy(command: ISetOccupancy): void
-	handleAddAdditionalService(command: IAddAdditionalService): void
-	handleRemoveAdditionalService(command: IRemoveAdditionalService): void
-	handleSetSpecialRequest(command: ISetSpecialRequest): void
-	handleConfirmReservation(command: IConfirmReservation): void
-	handleCancelReservation(command: ICancelReservation): void
+	handleCreateReservation(command: ICreateReservation): Promise<void>
+	handleSetOccupancy(command: ISetOccupancy): Promise<void>
+	handleAddAdditionalService(command: IAddAdditionalService): Promise<void>
+	handleRemoveAdditionalService(command: IRemoveAdditionalService): Promise<void>
+	handleSetSpecialRequest(command: ISetSpecialRequest): Promise<void>
+	handleConfirmReservation(command: IConfirmReservation): Promise<void>
+	handleCancelReservation(command: ICancelReservation): Promise<void>
 }
 export type { IReservationCommandHandlers }
 //#endregion interface
@@ -62,67 +62,67 @@ export class ReservationCommandHandlers implements IReservationCommandHandlers {
 		commandBus.registerHandler(commandName, this[`handle${commandName}` as keyof this], this)
 	}
 
-	public handleCreateReservation(command: ICreateReservation): void {
+	public async handleCreateReservation(command: ICreateReservation): Promise<void> {
 		const { aggregateId, houseId, arrivalDate, departureDate, price } = command
 
 		const reservation = this.factory.create(
 			aggregateId, houseId, arrivalDate, departureDate, price
 		)
 
-		this.repository.save(reservation, -1)
+		await this.repository.save(reservation, -1)
 	}
 
-	public handleSetOccupancy(command: ISetOccupancy): void {
+	public async handleSetOccupancy(command: ISetOccupancy): Promise<void> {
 		const { aggregateId, numberOfGuests, expectedAggregateVersion } = command
 
-		const reservation = this.repository.getById(aggregateId)
+		const reservation = await this.repository.getById(aggregateId)
 
 		reservation.setOccupancy(numberOfGuests)
-		this.repository.save(reservation, expectedAggregateVersion)
+		await this.repository.save(reservation, expectedAggregateVersion)
 	}
 
-	public handleAddAdditionalService(command: IAddAdditionalService): void {
+	public async handleAddAdditionalService(command: IAddAdditionalService): Promise<void> {
 		const { aggregateId, serviceId, name, price, expectedAggregateVersion } = command
 
-		const reservation = this.repository.getById(aggregateId)
+		const reservation = await this.repository.getById(aggregateId)
 
 		reservation.addAdditionalService(serviceId, name, price)
-		this.repository.save(reservation, expectedAggregateVersion)
+		await this.repository.save(reservation, expectedAggregateVersion)
 	}
 
-	public handleRemoveAdditionalService(command: IRemoveAdditionalService): void {
+	public async handleRemoveAdditionalService(command: IRemoveAdditionalService): Promise<void> {
 		const { aggregateId, serviceId, expectedAggregateVersion } = command
 
-		const reservation = this.repository.getById(aggregateId)
+		const reservation = await this.repository.getById(aggregateId)
 
 		reservation.removeAdditionalService(serviceId)
-		this.repository.save(reservation, expectedAggregateVersion)
+		await this.repository.save(reservation, expectedAggregateVersion)
 	}
 
-	public handleSetSpecialRequest(command: ISetSpecialRequest): void {
+	public async handleSetSpecialRequest(command: ISetSpecialRequest): Promise<void> {
 		const { aggregateId, specialRequest, expectedAggregateVersion } = command
 
-		const reservation = this.repository.getById(aggregateId)
+		const reservation = await this.repository.getById(aggregateId)
 
 		reservation.setSpecialRequest(specialRequest)
-		this.repository.save(reservation, expectedAggregateVersion)
+		await this.repository.save(reservation, expectedAggregateVersion)
 	}
 
-	public handleConfirmReservation(command: IConfirmReservation): void {
+	public async handleConfirmReservation(command: IConfirmReservation): Promise<void> {
 		const { aggregateId, expectedAggregateVersion } = command
 
-		const reservation = this.repository.getById(aggregateId)
+		const reservation = await this.repository.getById(aggregateId)
 
 		reservation.confirm()
-		this.repository.save(reservation, expectedAggregateVersion)
+		await this.repository.save(reservation, expectedAggregateVersion)
 	}
 
-	handleCancelReservation(command: ICancelReservation): void {
+	public async handleCancelReservation(command: ICancelReservation): Promise<void> {
 		const { aggregateId, expectedAggregateVersion } = command
 
-		const reservation = this.repository.getById(aggregateId)
+		const reservation = await this.repository.getById(aggregateId)
 
 		reservation.cancel()
-		this.repository.save(reservation, expectedAggregateVersion)
+		await this.repository.save(reservation, expectedAggregateVersion)
 	}
 }

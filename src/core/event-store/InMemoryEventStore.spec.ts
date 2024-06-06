@@ -1,22 +1,22 @@
-import { EventStore, } from './EventStore.js'
+import { InMemoryEventStore, } from './InMemoryEventStore.js'
 
 import type { IEvent, } from '../message-bus/Event.js'
 import type { IEventBus, } from '../message-bus/EventBus.js'
 
-describe('EventStore', () => {
-	let eventStore: EventStore
+describe('InMemoryEventStore', () => {
+	let eventStore: InMemoryEventStore
 	let messageBus: IEventBus
 
 	beforeEach(() => {
 		messageBus = <IEventBus>{
 			publish: <any>jest.fn()
 		}
-		eventStore = new EventStore(messageBus)
+		eventStore = new InMemoryEventStore(messageBus)
 	})
 
 	describe('getEventsForAggregate', () => {
 
-		it('should return all events for an aggregate', () => {
+		it('should return all events for an aggregate', async () => {
 			// Arrange
 			const aggregateId = '1'
 			const events = [
@@ -26,7 +26,7 @@ describe('EventStore', () => {
 			eventStore.saveEvents(aggregateId, events, 2)
 
 			// Act
-			const result = eventStore.getEventsForAggregate(aggregateId)
+			const result = await eventStore.getEventsForAggregate(aggregateId)
 
 			// Assert
 			expect(result).toEqual([
@@ -40,14 +40,14 @@ describe('EventStore', () => {
 			const aggregateId = '1'
 
 			// Act & Assert
-			expect(() => eventStore.getEventsForAggregate(aggregateId))
+			expect(async () => await eventStore.getEventsForAggregate(aggregateId))
 				.toThrow('Aggregate not found.')
 		})
 	})
 
 	describe('saveEvents', () => {
 
-		it('should save events for an aggregate', () => {
+		it('should save events for an aggregate', async () => {
 			// Arrange
 			const aggregateId = '1'
 			const events = [
@@ -59,7 +59,7 @@ describe('EventStore', () => {
 			jest.spyOn(messageBus, 'publish')
 
 			// Act
-			eventStore.saveEvents(aggregateId, events, expectedVersion)
+			await eventStore.saveEvents(aggregateId, events, expectedVersion)
 
 			// Assert
 			expect(messageBus.publish).toHaveBeenNthCalledWith(1, events[0])
@@ -71,14 +71,14 @@ describe('EventStore', () => {
 			])
 		})
 
-		it('should throw an error when saving events with an incorrect expected version', () => {
+		it('should throw an error when saving events with an incorrect expected version', async () => {
 			// Arrange
 			const aggregateId = '1'
 			const events = [
 				<IEvent>{ constructor: { name: 'EventCalled' } },
 				<IEvent>{ constructor: { name: 'AnotherEventCalled' } },
 			]
-			eventStore.saveEvents(aggregateId, events, 2)
+			await eventStore.saveEvents(aggregateId, events, 2)
 
 			const newEvents = [
 				<IEvent>{ constructor: { name: 'UnexpectedEventCalled' } },
@@ -86,7 +86,7 @@ describe('EventStore', () => {
 			const expectedVersion = 9
 
 			// Act & Assert
-			expect(() => eventStore.saveEvents(aggregateId, newEvents, expectedVersion))
+			expect(async () => await eventStore.saveEvents(aggregateId, newEvents, expectedVersion))
 				.toThrow('An operation has been performed on an aggregate root that is out of date.')
 		})
 	})
