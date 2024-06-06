@@ -35,13 +35,13 @@ interface IReservation {
 	departureDate: Date
 	price: number
 	numberOfGuests: number
-	additionalServices: { id: string; name: string; price: number; }[]
+	additionalServices: { id: string; description: string; price: number; }[]
 	specialRequest: string | undefined
 	status: 'created' | 'confirmed' | 'canceled'
 
 	create(id: string, houseId: string, arrivalDate: Date, departureDate: Date, price: number): void
 	setOccupancy(numberOfGuests: number): void
-	addAdditionalService(serviceId: string, name: string, price: number): void
+	addAdditionalService(serviceId: string, description: string, price: number): void
 	removeAdditionalService(serviceId: string): void
 	setSpecialRequest(message: string): void
 	confirm(): void
@@ -60,7 +60,7 @@ export class Reservation extends AggregateRoot implements IReservation
 	public status: 'created' | 'confirmed' | 'canceled' = 'created'
 
 	public numberOfGuests: number = 0
-	public readonly additionalServices: { id: string; name: string; price: number; }[] = []
+	public readonly additionalServices: { id: string; description: string; price: number; }[] = []
 	public specialRequest: string | undefined
 
 	//#region create
@@ -97,17 +97,17 @@ export class Reservation extends AggregateRoot implements IReservation
 	//#endregion set-occupancy
 
 	//#region add-additional-service
-	public addAdditionalService(serviceId: string, name: string, price: number): void
+	public addAdditionalService(serviceId: string, description: string, price: number): void
 	{
 		if (this.additionalServices.some(service => service.id === serviceId))
 		{
 			throw new Error('The additional service has already been added')
 		}
-		this.applyChange(new AdditionalServiceAdded(this.id, serviceId, name, price))
+		this.applyChange(new AdditionalServiceAdded(this.id, serviceId, description, price))
 	}
 	protected applyAdditionalServiceAdded(event: IAdditionalServiceAdded): void
 	{
-		this.additionalServices.push({ id: event.serviceId, name: event.name, price: event.price })
+		this.additionalServices.push({ id: event.serviceId, description: event.description, price: event.price })
 	}
 	//#endregion add-additional-service
 

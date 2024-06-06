@@ -13,7 +13,7 @@ describe('EventBus', () => {
 
 		it('should register event handler', () => {
 			// Arrange
-			const event = <IEvent>{ constructor: { name: 'EventCalled' } }
+			const event = <IEvent>{  name: 'EventCalled' }
 			const handler = jest.fn()
 
 			// Act
@@ -30,7 +30,7 @@ describe('EventBus', () => {
 
 		it('should publish an event and invoke all registered event handlers', () => {
 			// Arrange
-			const event = <IEvent>{ constructor: { name: 'EventCalled' } }
+			const event = <IEvent>{  name: 'EventCalled' }
 			const handler1 = jest.fn()
 			const handler2 = jest.fn()
 			messageBus.registerHandler('EventCalled', handler1)
@@ -46,7 +46,7 @@ describe('EventBus', () => {
 
 		it('should not throw an error if no handler is found', () => {
 			// Arrange
-			const event = <IEvent>{ constructor: { name: 'EventCalled' } }
+			const event = <IEvent>{  name: 'EventCalled' }
 
 			// Act & Assert
 			expect(() => messageBus.publish(event)).not.toThrow()

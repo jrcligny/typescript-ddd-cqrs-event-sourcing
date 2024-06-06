@@ -33,7 +33,7 @@ describe('CommandBus', () => {
 
 		it('should send a command', () => {
 			// Arrange
-			const command = <ICommand>{ constructor: { name: 'TestCommand' } }
+			const command = <ICommand>{  name: 'TestCommand' }
 			const commandHandler = jest.fn()
 			messageBus.registerHandler('TestCommand', commandHandler, {})
 
@@ -46,7 +46,7 @@ describe('CommandBus', () => {
 
 		it('should throw an error if no handler is found', () => {
 			// Arrange
-			const command = <ICommand>{ constructor: { name: 'TestCommand' } }
+			const command = <ICommand>{  name: 'TestCommand' }
 
 			// Act & Assert
 			expect(() => messageBus.send(command)).toThrow(

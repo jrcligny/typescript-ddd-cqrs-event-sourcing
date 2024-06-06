@@ -6,6 +6,9 @@ import type { IEvent } from '../../core/message-bus/Event.js'
 
 //#region interface
 interface IAdditionalServiceRemoved extends IEvent {
+	/**
+	 * The id of the service that was removed
+	 */
 	readonly serviceId: string
 }
 export type { IAdditionalServiceRemoved }
@@ -16,6 +19,6 @@ export class AdditionalServiceRemoved extends Event implements IAdditionalServic
 		reservationId: string,
 		public readonly serviceId: string
 	) {
-		super(reservationId)
+		super(AdditionalServiceRemoved.name, reservationId)
 	}
 }

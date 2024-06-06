@@ -51,7 +51,7 @@ export class QueryBus implements IQueryBus {
 	 * @throws Error if no handler is registered for the query.
 	 */
 	public async send<T extends IMessage, U>(query: T): Promise<U> {
-		const queryName = query.constructor.name
+		const queryName = query.name
 		if (!this.handlersFor[queryName])
 		{
 			throw new Error(`No handler registered for ${queryName}`)

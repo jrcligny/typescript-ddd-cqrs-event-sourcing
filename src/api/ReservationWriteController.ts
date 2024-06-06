@@ -102,9 +102,10 @@ export function instanciate(eventStore: IEventStore, app: Express)
 	 * Register a post request to add an additional service to a reservation
 	 */
 	app.post('/reservation/:id/add-service/:service-id', [
-		body('name').isString().withMessage('name must be a string'),
+		param('id').isString().withMessage('id must be a string'),
+		param('service-id').isString().withMessage('service-id must be a string'),
+		body('description').isString().withMessage('name must be a string'),
 		body('price').isNumeric().withMessage('price must be a number'),
-		body('service-id').isString().withMessage('service-id must be a string'),
 		body('expectedAggregateVersion').isInt().withMessage('expectedAggregateVersion must be an integer'),
 	], (req: Request, res: Response) => {
 
@@ -121,7 +122,7 @@ export function instanciate(eventStore: IEventStore, app: Express)
 		const commandInstance = new AddAdditionalService(
 			payload.id,
 			payload['service-id'],
-			payload.name,
+			payload.description,
 			payload.price,
 			payload.expectedAggregateVersion
 		)
@@ -137,7 +138,8 @@ export function instanciate(eventStore: IEventStore, app: Express)
 	 * Register a post request to remove an additional service from a reservation
 	 */
 	app.post('/reservation/:id/remove-service/:service-id', [
-		body('service-id').isString().withMessage('service-id must be a string'),
+		param('id').isString().withMessage('id must be a string'),
+		param('service-id').isString().withMessage('service-id must be a string'),
 		body('expectedAggregateVersion').isInt().withMessage('expectedAggregateVersion must be an integer'),
 	], (req: Request, res: Response) => {
 
@@ -168,6 +170,7 @@ export function instanciate(eventStore: IEventStore, app: Express)
 	 * Register a post request to set a special request for a reservation
 	 */
 	app.post('/reservation/:id/special-request', [
+		param('id').isString().withMessage('id must be a string'),
 		body('message').isString().withMessage('message must be a string'),
 		body('expectedAggregateVersion').isInt().withMessage('expectedAggregateVersion must be an integer'),
 	], (req: Request, res: Response) => {
@@ -199,6 +202,7 @@ export function instanciate(eventStore: IEventStore, app: Express)
 	 * Register a post request to confirm a reservation
 	 */
 	app.post('/reservation/:id/confirm', [
+		param('id').isString().withMessage('id must be a string'),
 		body('expectedAggregateVersion').isInt().withMessage('expectedAggregateVersion must be an integer'),
 	], (req: Request, res: Response) => {
 
@@ -228,6 +232,7 @@ export function instanciate(eventStore: IEventStore, app: Express)
 	 * Register a post request to cancel a reservation
 	 */
 	app.post('/reservation/:id/cancel', [
+		param('id').isString().withMessage('id must be a string'),
 		body('expectedAggregateVersion').isInt().withMessage('expectedAggregateVersion must be an integer'),
 	], (req: Request, res: Response) => {
 

@@ -11,4 +11,9 @@ export type { IReservationCanceled }
 //#endregion interface
 
 export class ReservationCanceled extends Event implements IReservationCanceled {
+	constructor (
+		reservationId: string
+	) {
+		super(ReservationCanceled.name, reservationId)
+	}
 }

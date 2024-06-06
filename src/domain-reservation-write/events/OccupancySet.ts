@@ -6,6 +6,9 @@ import type { IEvent } from '../../core/message-bus/Event.js'
 
 //#region interface
 interface IOccupancySet extends IEvent {
+	/**
+	 * The number of guests that will be staying in the house
+	 */
 	readonly numberOfGuests: number
 }
 export type { IOccupancySet }
@@ -16,6 +19,6 @@ export class OccupancySet extends Event implements IOccupancySet {
 		reservationId: string,
 		public readonly numberOfGuests: number
 	) {
-		super(reservationId)
+		super(OccupancySet.name, reservationId)
 	}
 }

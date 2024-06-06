@@ -6,6 +6,9 @@ import type { ICommand, } from '../../core/message-bus/Command.js'
 
 //#region interface
 interface ISetSpecialRequest extends ICommand {
+	/**
+	 * The special request for the reservation
+	 */
 	readonly specialRequest: string
 }
 export type { ISetSpecialRequest }
@@ -17,6 +20,6 @@ export class SetSpecialRequest extends Command implements ISetSpecialRequest {
 		public readonly specialRequest: string,
 		expectedReservationVersion: number
 	) {
-		super(reservationId, expectedReservationVersion)
+		super(SetSpecialRequest.name, reservationId, expectedReservationVersion)
 	}
 }

@@ -36,31 +36,35 @@ describe('Reservation', () => {
 
 	it('should add an additional service', () => {
 		// Arrange
-		const additionalServiceId = 'breakfast-1'
-		const additionalServiceName = 'Breakfast'
-		const additionalServicePrice = 10
+		const serviceId = 'breakfast-1'
+		const serviceDescription = 'Breakfast'
+		const servicePrice = 10
 
 		// Act
-		reservation.addAdditionalService(additionalServiceId, additionalServiceName, additionalServicePrice)
+		reservation.addAdditionalService(serviceId, serviceDescription, servicePrice)
 
 		// Assert
-		expect(reservation.additionalServices).toContainEqual({id: additionalServiceId, name: additionalServiceName, price: additionalServicePrice})
+		expect(reservation.additionalServices).toContainEqual({
+			id: serviceId, description: serviceDescription, price: servicePrice
+		})
 		expect(reservation.getVersion()).toEqual(2)
 		expect(reservation.getUncommittedChanges()).toHaveLength(2)
 	})
 
 	it('should remove an additional service', () => {
 		// Arrange
-		const additionalServiceId = 'breakfast-1'
-		const additionalServiceName = 'Breakfast'
-		const additionalServicePrice = 10
-		reservation.addAdditionalService(additionalServiceId, additionalServiceName, additionalServicePrice)
+		const serviceId = 'breakfast-1'
+		const serviceDescription = 'Breakfast'
+		const servicePrice = 10
+		reservation.addAdditionalService(serviceId, serviceDescription, servicePrice)
 
 		// Act
-		reservation.removeAdditionalService(additionalServiceId)
+		reservation.removeAdditionalService(serviceId)
 
 		// Assert
-		expect(reservation.additionalServices).not.toContainEqual({id: additionalServiceId, name: additionalServiceName, price: additionalServicePrice})
+		expect(reservation.additionalServices).not.toContainEqual({
+			id: serviceId, description: serviceDescription, price: servicePrice
+		})
 		expect(reservation.getVersion()).toEqual(3)
 		expect(reservation.getUncommittedChanges()).toHaveLength(3)
 	})

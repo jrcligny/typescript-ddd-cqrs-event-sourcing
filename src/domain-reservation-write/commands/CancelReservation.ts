@@ -11,4 +11,10 @@ export type { ICancelReservation }
 //#endregion interface
 
 export class CancelReservation extends Command implements ICancelReservation {
+	constructor (
+		reservationId: string,
+		expectedAggregateVersion: number
+	) {
+		super(CancelReservation.name, reservationId, expectedAggregateVersion)
+	}
 }

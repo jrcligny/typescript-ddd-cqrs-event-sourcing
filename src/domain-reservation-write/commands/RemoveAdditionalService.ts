@@ -6,6 +6,9 @@ import type { ICommand, } from '../../core/message-bus/Command.js'
 
 //#region interface
 interface IRemoveAdditionalService extends ICommand {
+	/**
+	 * The id of the service to remove
+	 */
 	readonly serviceId: string
 }
 export type { IRemoveAdditionalService }
@@ -17,6 +20,6 @@ export class RemoveAdditionalService extends Command implements IRemoveAdditiona
 		public readonly serviceId: string,
 		expectedReservationVersion: number
 	) {
-		super(reservationId, expectedReservationVersion)
+		super(RemoveAdditionalService.name, reservationId, expectedReservationVersion)
 	}
 }

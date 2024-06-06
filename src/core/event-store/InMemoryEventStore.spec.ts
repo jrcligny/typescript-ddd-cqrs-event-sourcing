@@ -20,8 +20,8 @@ describe('InMemoryEventStore', () => {
 			// Arrange
 			const aggregateId = '1'
 			const events = [
-				<IEvent>{ constructor: { name: 'EventCalled' } },
-				<IEvent>{ constructor: { name: 'AnotherEventCalled' } },
+				<IEvent>{ name: 'EventCalled' },
+				<IEvent>{ name: 'AnotherEventCalled' },
 			]
 			eventStore.saveEvents(aggregateId, events, 2)
 
@@ -30,18 +30,17 @@ describe('InMemoryEventStore', () => {
 
 			// Assert
 			expect(result).toEqual([
-				<IEvent>{ constructor: { name: 'EventCalled' } },
-				<IEvent>{ constructor: { name: 'AnotherEventCalled' } },
+				<IEvent>{ name: 'EventCalled' },
+				<IEvent>{ name: 'AnotherEventCalled' },
 			])
 		})
 
-		it('should throw an error when getting events for an aggregate that does not exist', () => {
+		it('should throw an error when getting events for an aggregate that does not exist', async () => {
 			// Arrange
 			const aggregateId = '1'
 
 			// Act & Assert
-			expect(async () => await eventStore.getEventsForAggregate(aggregateId))
-				.toThrow('Aggregate not found.')
+			expect(eventStore.getEventsForAggregate(aggregateId)).rejects.toThrow('Aggregate not found.')
 		})
 	})
 
@@ -51,8 +50,8 @@ describe('InMemoryEventStore', () => {
 			// Arrange
 			const aggregateId = '1'
 			const events = [
-				<IEvent>{ constructor: { name: 'EventCalled' } },
-				<IEvent>{ constructor: { name: 'AnotherEventCalled' } },
+				<IEvent>{ name: 'EventCalled' },
+				<IEvent>{ name: 'AnotherEventCalled' },
 			]
 			const expectedVersion = 2
 
@@ -60,14 +59,15 @@ describe('InMemoryEventStore', () => {
 
 			// Act
 			await eventStore.saveEvents(aggregateId, events, expectedVersion)
+			const storedEvents = await eventStore.getEventsForAggregate(aggregateId)
 
 			// Assert
 			expect(messageBus.publish).toHaveBeenNthCalledWith(1, events[0])
 			expect(messageBus.publish).toHaveBeenNthCalledWith(2, events[1])
 
-			expect(eventStore.getEventsForAggregate(aggregateId)).toEqual([
-				<IEvent>{ constructor: { name: 'EventCalled' } },
-				<IEvent>{ constructor: { name: 'AnotherEventCalled' } },
+			expect(storedEvents).toEqual([
+				<IEvent>{ name: 'EventCalled' },
+				<IEvent>{ name: 'AnotherEventCalled' },
 			])
 		})
 
@@ -75,19 +75,19 @@ describe('InMemoryEventStore', () => {
 			// Arrange
 			const aggregateId = '1'
 			const events = [
-				<IEvent>{ constructor: { name: 'EventCalled' } },
-				<IEvent>{ constructor: { name: 'AnotherEventCalled' } },
+				<IEvent>{ name: 'EventCalled' },
+				<IEvent>{ name: 'AnotherEventCalled' },
 			]
 			await eventStore.saveEvents(aggregateId, events, 2)
 
 			const newEvents = [
-				<IEvent>{ constructor: { name: 'UnexpectedEventCalled' } },
+				<IEvent>{ name: 'UnexpectedEventCalled' },
 			]
 			const expectedVersion = 9
 
 			// Act & Assert
-			expect(async () => await eventStore.saveEvents(aggregateId, newEvents, expectedVersion))
-				.toThrow('An operation has been performed on an aggregate root that is out of date.')
+			expect(eventStore.saveEvents(aggregateId, newEvents, expectedVersion))
+				.rejects.toThrow('An operation has been performed on an aggregate root that is out of date.');
 		})
 	})
 })

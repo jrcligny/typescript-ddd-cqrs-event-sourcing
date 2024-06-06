@@ -23,9 +23,9 @@ describe('Repository', () => {
 
 	describe('save', () => {
 
-		it('should save an aggregate and reset uncommitted changes', () => {
+		it('should save an aggregate and reset uncommitted changes', async () => {
 			// Arrange
-			const event = <IEvent>{ constructor: { name: 'EventCalled' } }
+			const event = <IEvent>{  name: 'EventCalled' }
 			const aggregate = <AggregateRoot>{
 				getId: () => '1',
 				getUncommittedChanges: () => [event],
@@ -38,7 +38,7 @@ describe('Repository', () => {
 			jest.spyOn(aggregate, 'markChangesAsCommitted')
 
 			// Act
-			repository.save(aggregate, expectedVersion)
+			await repository.save(aggregate, expectedVersion)
 
 			// Assert
 			expect(storage.saveEvents).toHaveBeenCalledWith('1', [event], expectedVersion)
@@ -48,18 +48,18 @@ describe('Repository', () => {
 
 	describe('getById', () => {
 
-		it('should get an aggregate by id', () => {
+		it('should get an aggregate by id', async () => {
 			// Arrange
 			const aggregateId = '1'
 
-			const history = [<IEvent>{ constructor: { name: 'EventCalled' } }]
-			jest.spyOn(storage, 'getEventsForAggregate').mockReturnValue(history)
+			const history = [<IEvent>{  name: 'EventCalled' }]
+			jest.spyOn(storage, 'getEventsForAggregate').mockResolvedValue(history)
 
 			const expectedAggregate = <AggregateRoot>{ constructor: { name: 'AggregateRoot' } }
 			jest.spyOn(factory, 'loadFromHistory').mockReturnValue(expectedAggregate)
 
 			// Act
-			const result = repository.getById(aggregateId)
+			const result = await repository.getById(aggregateId)
 
 			// Assert
 			expect(storage.getEventsForAggregate).toHaveBeenCalledWith(aggregateId)

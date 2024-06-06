@@ -43,7 +43,7 @@ export type { IEvent, }
  * 		public readonly customerId: string,
  * 		public readonly orderDate: Date
  * 	) {
- * 		super(orderId)
+ * 		super('OrderCreated', orderId)
  * 	}
  * }
  * ```
@@ -52,9 +52,9 @@ export class Event implements IEvent {
 
 	/**
 	 * Creates a new instance of the Event class.
-	 * @param aggregateId The identifier of the aggregate associated with the event.
 	 */
 	constructor(
+		public readonly name: string,
 		public readonly aggregateId: string
 	) {}
 }

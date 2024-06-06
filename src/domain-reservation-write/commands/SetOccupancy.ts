@@ -6,6 +6,9 @@ import type { ICommand, } from '../../core/message-bus/Command.js'
 
 //#region interface
 interface ISetOccupancy extends ICommand {
+	/**
+	 * The number of guests that will occupy the room
+	 */
 	readonly numberOfGuests: number
 }
 export type { ISetOccupancy }
@@ -17,6 +20,6 @@ export class SetOccupancy extends Command implements ISetOccupancy {
 		public readonly numberOfGuests: number,
 		expectedReservationVersion: number
 	) {
-		super(reservationId, expectedReservationVersion)
+		super(SetOccupancy.name, reservationId, expectedReservationVersion)
 	}
 }

@@ -51,7 +51,7 @@ export type { ICommand }
  * 		public readonly orderDate: Date,
  * 		expectedAggregateVersion: number
  * 	) {
- * 		super(orderId, expectedAggregateVersion)
+ * 		super('CreateOrder', orderId, expectedAggregateVersion)
  * 	}
  * }
  * ```
@@ -59,10 +59,9 @@ export type { ICommand }
 export class Command implements ICommand {
 	/**
 	 * Creates a new instance of the Command class.
-	 * @param aggregateId The unique identifier of the aggregate.
-	 * @param expectedAggregateVersion The expected version of the aggregate when the command is executed.
 	 */
 	constructor(
+		public readonly name: string,
 		public readonly aggregateId: string,
 		public readonly expectedAggregateVersion: number
 	) {}

@@ -11,4 +11,9 @@ export type { IReservationConfirmed }
 //#endregion interface
 
 export class ReservationConfirmed extends Event implements IReservationConfirmed {
+	constructor (
+		reservationId: string
+	) {
+		super(ReservationConfirmed.name, reservationId)
+	}
 }

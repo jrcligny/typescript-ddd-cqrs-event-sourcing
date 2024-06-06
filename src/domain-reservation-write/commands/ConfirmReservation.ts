@@ -11,4 +11,10 @@ export type { IConfirmReservation }
 //#endregion interface
 
 export class ConfirmReservation extends Command implements IConfirmReservation {
+	constructor (
+		reservationId: string,
+		expectedAggregateVersion: number
+	) {
+		super(ConfirmReservation.name, reservationId, expectedAggregateVersion)
+	}
 }

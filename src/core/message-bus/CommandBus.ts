@@ -45,7 +45,7 @@ export class CommandBus implements ICommandBus {
 	 * @throws Error if no handler is registered for the command.
 	 */
 	public send<T extends ICommand>(command: T): void {
-		const commandName = command.constructor.name
+		const commandName = command.name
 		if (!this.handlersFor[commandName])
 		{
 			throw new Error(`No handler registered for ${commandName}`)

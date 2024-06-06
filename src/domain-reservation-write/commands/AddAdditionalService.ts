@@ -6,8 +6,17 @@ import type { ICommand, } from '../../core/message-bus/Command.js'
 
 //#region interface
 interface IAddAdditionalService extends ICommand {
+	/**
+	 * The id of the service to add
+	 */
 	readonly serviceId: string
+	/**
+	 * The name of the service to add
+	 */
 	readonly name: string
+	/**
+	 * The price of the service to add
+	 */
 	readonly price: number
 }
 export type { IAddAdditionalService }
@@ -21,6 +30,6 @@ export class AddAdditionalService extends Command implements IAddAdditionalServi
 		public readonly price: number,
 		expectedReservationVersion: number
 	) {
-		super(reservationId, expectedReservationVersion)
+		super(AddAdditionalService.name, reservationId, expectedReservationVersion)
 	}
 }

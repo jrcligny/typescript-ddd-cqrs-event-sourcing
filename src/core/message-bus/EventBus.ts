@@ -52,7 +52,7 @@ export class EventBus implements IEventBus {
 	}
 
 	public publish<T extends IEvent>(event: T): void {
-		const eventName = event.constructor.name
+		const eventName = event.name
 		if (this.handlerFor[eventName])
 		{
 			this.handlerFor[eventName].forEach((handler) => handler(event))

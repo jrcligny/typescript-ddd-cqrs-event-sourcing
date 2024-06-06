@@ -5,7 +5,7 @@ import type { IEvent, } from './message-bus/Event.js'
 class TestAggregateRoot extends AggregateRoot {
 	callEvent(): void
 	{
-		const event = <IEvent>{ constructor: { name: 'EventCalled' } }
+		const event = <IEvent>{  name: 'EventCalled' }
 		this.applyChange(event)
 	}
 	applyEventCalled(event: IEvent) {
@@ -13,7 +13,7 @@ class TestAggregateRoot extends AggregateRoot {
 	}
 	callUnknowEvent(): void
 	{
-		const event = <IEvent>{ constructor: { name: 'UnknownEvent' } }
+		const event = <IEvent>{  name: 'UnknownEvent' }
 		this.applyChange(event)
 	}
 }
@@ -29,7 +29,7 @@ describe('AggregateRoot', () => {
 
 		it('should apply the change and increment the version', () => {
 			// Arrange
-			const event = <IEvent>{ constructor: { name: 'EventCalled' } }
+			const event = <IEvent>{  name: 'EventCalled' }
 			const spyOnApplyEventCalled = jest.spyOn(<any>aggregateRoot, 'applyEventCalled')
 
 			// Act
@@ -58,9 +58,9 @@ describe('AggregateRoot', () => {
 
 		it('should apply the changes from the history', () => {
 			// Arrange
-			const event1 = <IEvent>{ constructor: { name: 'EventCalled' } }
-			const event2 = <IEvent>{ constructor: { name: 'EventCalled' } }
-			const event3 = <IEvent>{ constructor: { name: 'EventCalled' } }
+			const event1 = <IEvent>{  name: 'EventCalled' }
+			const event2 = <IEvent>{  name: 'EventCalled' }
+			const event3 = <IEvent>{  name: 'EventCalled' }
 			const history = [event1, event2, event3]
 			const spyOnApplyEventCalled = jest.spyOn(<any>aggregateRoot, 'applyEventCalled')
 
@@ -78,9 +78,9 @@ describe('AggregateRoot', () => {
 		
 		it('should throw an error if no handler is found for an event in the history', () => {
 			// Arrange
-			const event1 = <IEvent>{ constructor: { name: 'EventCalled' } }
-			const event2 = <IEvent>{ constructor: { name: 'UnknownEvent' } }
-			const event3 = <IEvent>{ constructor: { name: 'EventCalled' } }
+			const event1 = <IEvent>{  name: 'EventCalled' }
+			const event2 = <IEvent>{  name: 'UnknownEvent' }
+			const event3 = <IEvent>{  name: 'EventCalled' }
 			const history = [event1, event2, event3]
 
 			// Act & Assert
@@ -97,7 +97,7 @@ describe('AggregateRoot', () => {
 
 		it('should clear the uncommitted changes', () => {
 			// Arrange
-			const event = <IEvent>{ constructor: { name: 'EventCalled' } }
+			const event = <IEvent>{  name: 'EventCalled' }
 			aggregateRoot.callEvent()
 
 			// Act
